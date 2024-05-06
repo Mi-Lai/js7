@@ -26,21 +26,31 @@ const addPokemonCard = (pokemon) => {
     // Crear elementos HTML para la tarjeta del Pokémon
     const cardContainer = document.createElement('div');
     cardContainer.classList.add('pokemon-card');
-
+    //nombre del pokemon
     const nameElement = document.createElement('h2');
     nameElement.textContent = pokemon.name;
-
+    //imagen del pokemon
     const imageElement = document.createElement('img');
     imageElement.src = pokemon.sprites.front_default;
     imageElement.alt = pokemon.name;
-
+    //tipo del pokemon
     const typeElement = document.createElement('p');
     typeElement.textContent = `Type: ${pokemon.types.map(type => type.type.name).join(', ')}`;
+    //peso del pokemon
+    const weightElement = document.createElement('p');
+    weightElement.textContent = `Weight: ${pokemon.weight} kg`;
+    weightElement.classList.add('pokemon-weight');
+    // ID del Pokémon
+    const idElement = document.createElement('p');
+    idElement.textContent = `ID: ${pokemon.id}`;
+    idElement.classList.add('pokemon-id');
 
     // Agregar elementos al contenedor de la tarjeta
     cardContainer.appendChild(nameElement);
     cardContainer.appendChild(imageElement);
     cardContainer.appendChild(typeElement);
+    cardContainer.appendChild(weightElement);
+    cardContainer.appendChild(idElement);
 
     // Obtener el contenedor donde se agregarán las tarjetas de Pokémon
     const pokemonContainer = document.getElementById('pokemon-container');
