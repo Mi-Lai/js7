@@ -54,7 +54,8 @@ const addPokemonCard = (pokemon) => {
 
     // Obtener el contenedor donde se agregarán las tarjetas de Pokémon
     const pokemonContainer = document.getElementById('pokemon-container');
-
+    // Limpiar el contenedor antes de agregar la nueva tarjeta
+    pokemonContainer.innerHTML = '';
     // Agregar la tarjeta del Pokémon al contenedor en el DOM
     pokemonContainer.appendChild(cardContainer);
 }
@@ -93,33 +94,24 @@ document.getElementById('previous-btn').addEventListener('click', async () => {
     console.log(previousPokemon.name);
     addPokemonCard(previousPokemon);
 });
-
 // obtener el siguiente pokemon
+document.getElementById('next-btn').addEventListener('click', async () => {
+    const currentPokeName = localStorage.getItem('currentPokeName');
+    const response = await fetch(`${BASE_URL}pokemon/${currentPokeName}`);
+    if (!response.ok) {
+        console.error('Network response was not ok');
+        return;
+    }
+    const pokemon = await response.json();
+    const nextPokemonId = pokemon.id + 1; 
+    const nextPokemon = await fetchPokemon(nextPokemonId); 
+    localStorage.setItem('currentPokeName', nextPokemon.name); 
+    console.log(nextPokemon.name); 
+    addPokemonCard(nextPokemon);
+});
 
-document.getElementById('previous-btn').addEventListener('click', async () => {
-        const currentPokeName = localStorage.getItem('currentPokeName');
-        const response = await fetch(`${BASE_URL}pokemon/${currentPokeName}`);
-       // const newId = Math.max(1, currentPokeId +1);
-       const pokemon= await response.json();
-       const nextPokemonId = pokemon.id + 1; //obtiene el siguiente pokemon
-        const nextPokemon = await fetchPokemon(nextPokemonId); //lo pone aquí
-        localStorage.setItem('currentPokeName', nextPokemon.name); //lo guarda en localStoroge
-        console.log(nextPokemon.name); // imprime el pokemon
-       //const pokemon = await fetchPokemon(newId);
-       addPokemonCard(nextPokemon);
-    });
-
-document.getElementById('next-btn') .addEventListener('click', async () => {
-        const currentPokeId = parseInt(localStorage.getItem('currentPokeId'));
-        const newId = currentPokeId + 1;
-        const pokemon = await fetchPokemon(newId);
-        console.log(pokemon);
-    })
-
-
-
-////////////////// POST
-//
+////////// POST
+// - La info -> LocalStorage -> Fetch
 
 fetch('https://jsonplaceholder.typicode.com/posts', {
     method: 'POST',
@@ -133,13 +125,3 @@ fetch('https://jsonplaceholder.typicode.com/posts', {
     }
 }).then(res => res.json())
     .then(json => console.log(json))
-
-
-
-
-
-
-
-// - El tamaño e info de la tarjeta es a consideración personal.
-// - La tarjeta debe mantenerse en la pantalla.
-// - La info -> LocalStorage -> Fetch
